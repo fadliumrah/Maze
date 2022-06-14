@@ -184,9 +184,12 @@ public class Maze extends JFrame {
         int high = 1;
 
         for (int i = 0; i < 20; i = i + 1) {
-            for (int j = 0; j < 20; j = j + 2) {
-                int n = rnd.nextInt((high - min) + 1);
-                arr[i][j] = n;
+            for (int j = 0; j < 20; j = j + 1) {
+                if (i % 2 == 0 || j % 2 == 1) {
+                    int n = rnd.nextInt((high - min) + 1);
+                    arr[i][j] = n;
+                }
+
             }
         }
 

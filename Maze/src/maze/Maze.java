@@ -178,10 +178,14 @@ public class Maze extends JFrame {
     }
 
     public void restoreResource(int[][] savedMazed) {
-        for (int i = 0; i < Size(); i++) {
-            for (int j = 0; j < Size(); j++) {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 2) {
+                    maze[i][j] = savedMazed[i][j];
 
-                maze[i][j] = savedMazed[i][j];
+                } else if (savedMazed[i][j] == 2) {
+                    maze[i][j] = 2;
+                }
 
             }
         }
@@ -223,17 +227,30 @@ public class Maze extends JFrame {
         Random col = new Random();
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
-                maze[i][j] = maze[i][j];
+
+                if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
+                } else if (maze[i][j] == 0) {
+                    arr[i][j] = 0;
+                } // else if (maze[i][j] == 2) {
+                  // int m = row.nextInt(20) + 0;
+                  // int n = col.nextInt(20) + 0;
+                  // arr[m][n] = 2;
+                  // }
+            }
+        }
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+
                 if (maze[i][j] == 2) {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
-                    maze[m][n] = 2;
+                    arr[m][n] = 2;
                 }
-
             }
         }
 
-        return maze;
+        return arr;
     }
 
     // draw the maze on the JFrame

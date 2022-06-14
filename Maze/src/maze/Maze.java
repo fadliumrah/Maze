@@ -17,7 +17,7 @@ public class Maze extends JFrame {
     int[][] maze = new int[][] {
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 2, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1 },
-            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
+            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 4, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
@@ -36,8 +36,6 @@ public class Maze extends JFrame {
             { 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0 },
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0 }
     };
-
-    int[][] fadli = GenerateArray();
 
     // inisialisasi tombol-tombol
     JButton exit;
@@ -132,7 +130,10 @@ public class Maze extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // code here
+                int x[][] = GenerateDestination();
+                repaint = true;
+                restoreDestination(x);
+                repaint();
 
             }
         });
@@ -142,7 +143,10 @@ public class Maze extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // code here
+                int x[][] = GenerateCourierPosition();
+                repaint = true;
+                restoreCourierPosition(x);
+                repaint();
 
             }
         });
@@ -171,10 +175,6 @@ public class Maze extends JFrame {
             }
         }
 
-        // sumber daya atau paket
-        maze[1][1] = 2;
-        // destinasi
-        maze[18][18] = 3;
     }
 
     public void restoreResource(int[][] savedMazed) {
@@ -190,10 +190,36 @@ public class Maze extends JFrame {
             }
         }
 
-        // sumber daya atau paket
-        // maze[1][1] = 2;
-        // destinasi
-        maze[18][18] = 3;
+    }
+
+    public void restoreDestination(int[][] savedMazed) {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 3) {
+                    maze[i][j] = savedMazed[i][j];
+
+                } else if (savedMazed[i][j] == 3) {
+                    maze[i][j] = 3;
+                }
+
+            }
+        }
+
+    }
+
+    public void restoreCourierPosition(int[][] savedMazed) {
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 4 || maze[i][j] == 3 || maze[i][j] == 2) {
+                    maze[i][j] = savedMazed[i][j];
+
+                } else if (savedMazed[i][j] == 4) {
+                    maze[i][j] = 4;
+                }
+
+            }
+        }
+
     }
 
     // menghasilkan array acak dengan nilai 0 atau 1
@@ -203,8 +229,6 @@ public class Maze extends JFrame {
 
         arr = new int[20][20];
         Random rnd = new Random();
-        int min = 0;
-        int high = 1;
 
         for (int i = 0; i < 20; i = i + 1) {
             for (int j = 0; j < 20; j = j + 1) {
@@ -213,6 +237,33 @@ public class Maze extends JFrame {
                     arr[i][j] = n;
                 }
 
+            }
+        }
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 2) {
+                    // sumber daya atau paket
+                    arr[i][j] = 2;
+
+                }
+            }
+        }
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 3) {
+
+                    arr[i][j] = 3;
+                }
+            }
+        }
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 4) {
+
+                    arr[i][j] = 4;
+                }
             }
         }
 
@@ -232,11 +283,7 @@ public class Maze extends JFrame {
                     arr[i][j] = 1;
                 } else if (maze[i][j] == 0) {
                     arr[i][j] = 0;
-                } // else if (maze[i][j] == 2) {
-                  // int m = row.nextInt(20) + 0;
-                  // int n = col.nextInt(20) + 0;
-                  // arr[m][n] = 2;
-                  // }
+                }
             }
         }
         for (int i = 0; i < 20; i++) {
@@ -246,6 +293,69 @@ public class Maze extends JFrame {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
                     arr[m][n] = 2;
+                }
+            }
+        }
+
+        return arr;
+    }
+
+    // menghasilkan array acak dengan nilai 0 atau 1
+    public int[][] GenerateDestination() {
+        int[][] arr;
+        arr = new int[20][20];
+        Random row = new Random();
+        Random col = new Random();
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+
+                if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
+                } else if (maze[i][j] == 0) {
+                    arr[i][j] = 0;
+                }
+            }
+        }
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+
+                if (maze[i][j] == 3) {
+                    int m = row.nextInt(20) + 0;
+                    int n = col.nextInt(20) + 0;
+                    arr[m][n] = 3;
+                }
+            }
+        }
+
+        return arr;
+    }
+
+    public int[][] GenerateCourierPosition() {
+        int[][] arr;
+        arr = new int[20][20];
+        Random row = new Random();
+        Random col = new Random();
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+
+                if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
+                } else if (maze[i][j] == 0) {
+                    arr[i][j] = 0;
+                } else if (maze[i][j] == 2) {
+                    arr[i][j] = 2;
+                } else if (maze[i][j] == 3) {
+                    arr[i][j] = 3;
+                }
+            }
+        }
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+
+                if (maze[i][j] == 4) {
+                    int m = row.nextInt(20) + 0;
+                    int n = col.nextInt(20) + 0;
+                    arr[m][n] = 4;
                 }
             }
         }
@@ -271,7 +381,11 @@ public class Maze extends JFrame {
                         case 3:
                             color = Color.RED; // goal (red)
                             break;
+                        case 4:
+                            color = Color.GREEN; // goal (red)
+                            break;
                         case 2:
+
                             color = Color.YELLOW; // initial state (yellow)
                             break;
 
@@ -298,6 +412,9 @@ public class Maze extends JFrame {
                             break;
                         case 3:
                             color = Color.RED; // goal (red)
+                            break;
+                        case 4:
+                            color = Color.GREEN; // goal (red)
                             break;
                         case 2:
                             color = Color.YELLOW; // initial state (yellow)

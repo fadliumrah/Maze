@@ -37,6 +37,8 @@ public class Maze extends JFrame {
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0 }
     };
 
+    int[][] fadli = GenerateArray();
+
     // inisialisasi tombol-tombol
     JButton exit;
     JButton ResetMap;
@@ -92,11 +94,11 @@ public class Maze extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // membuat array acak dan menyimpan di x
-                int x[][] = GenerateArray();
+                maze = GenerateArray();
                 repaint = true;
 
                 // untuk menampilkan array x di layar
-                restore(x);
+                restore(maze);
 
                 // menggambar ulang array di frame
                 repaint();
@@ -117,8 +119,10 @@ public class Maze extends JFrame {
         ResetResource.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                // code here
+                int x[][] = GenerateResouce();
+                repaint = true;
+                restoreResource(x);
+                repaint();
 
             }
         });
@@ -173,6 +177,21 @@ public class Maze extends JFrame {
         maze[18][18] = 3;
     }
 
+    public void restoreResource(int[][] savedMazed) {
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+
+                maze[i][j] = savedMazed[i][j];
+
+            }
+        }
+
+        // sumber daya atau paket
+        // maze[1][1] = 2;
+        // destinasi
+        maze[18][18] = 3;
+    }
+
     // menghasilkan array acak dengan nilai 0 atau 1
     public int[][] GenerateArray() {
         // tempat menyimpan array yang sudah diacak
@@ -186,7 +205,7 @@ public class Maze extends JFrame {
         for (int i = 0; i < 20; i = i + 1) {
             for (int j = 0; j < 20; j = j + 1) {
                 if (i % 2 == 0 || j % 2 == 1) {
-                    int n = rnd.nextInt((high - min) + 1);
+                    int n = rnd.nextInt(2) + 0;
                     arr[i][j] = n;
                 }
 
@@ -194,6 +213,27 @@ public class Maze extends JFrame {
         }
 
         return arr;
+    }
+
+    // menghasilkan array acak dengan nilai 0 atau 1
+    public int[][] GenerateResouce() {
+        int[][] arr;
+        arr = new int[20][20];
+        Random row = new Random();
+        Random col = new Random();
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                maze[i][j] = maze[i][j];
+                if (maze[i][j] == 2) {
+                    int m = row.nextInt(20) + 0;
+                    int n = col.nextInt(20) + 0;
+                    maze[m][n] = 2;
+                }
+
+            }
+        }
+
+        return maze;
     }
 
     // draw the maze on the JFrame
@@ -205,7 +245,7 @@ public class Maze extends JFrame {
         // draw the maze to random
         if (repaint == true) {
             for (int row = 0; row < maze.length; row++) {
-                for (int col = 0; col < maze[0].length; col++) {
+                for (int col = 0; col < maze.length; col++) {
                     Color color;
                     switch (maze[row][col]) {
                         case 1:
@@ -233,7 +273,7 @@ public class Maze extends JFrame {
         // draw the maze to initial maze
         if (repaint == false) { // what to do if the repaint was set to false (draw the solution for the maze)
             for (int row = 0; row < maze.length; row++) {
-                for (int col = 0; col < maze[0].length; col++) {
+                for (int col = 0; col < maze.length; col++) {
                     Color color;
                     switch (maze[row][col]) {
                         case 1:

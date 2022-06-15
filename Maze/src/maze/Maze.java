@@ -292,6 +292,7 @@ public class Maze extends JFrame {
                 if (maze[i][j] == 2) {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
+
                     arr[m][n] = 2;
                 }
             }
@@ -382,20 +383,39 @@ public class Maze extends JFrame {
                             color = Color.RED; // goal (red)
                             break;
                         case 4:
-                            color = Color.GREEN; // goal (red)
+                            color = Color.white; // goal (red)
                             break;
                         case 2:
+                            color = Color.darkGray; // initial state (yellow)
 
-                            color = Color.YELLOW; // initial state (yellow)
                             break;
 
                         default:
                             color = Color.WHITE; // white free space 0 (white)
                     }
+
                     g.setColor(color);
                     g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
                     g.setColor(Color.BLUE); // the border rectangle color
                     g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
+
+                    if (maze[row][col] == 2) {
+
+                        g.setColor(Color.red);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2.5), (int) (16), (int) (4));
+                        g.setColor(Color.white);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), (int) (4));
+                        g.setColor(Color.GREEN);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2.5), 2, 20);
+                    }
+                    if (maze[row][col] == 4) {
+                        g.setColor(Color.BLACK);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                        g.setColor(Color.BLACK);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                        g.setColor(Color.darkGray);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (5), 10, 5, 5);
+                    }
 
                 }
             }
@@ -403,6 +423,7 @@ public class Maze extends JFrame {
 
         // draw the maze to initial maze
         if (repaint == false) { // what to do if the repaint was set to false (draw the solution for the maze)
+
             for (int row = 0; row < maze.length; row++) {
                 for (int col = 0; col < maze.length; col++) {
                     Color color;
@@ -414,10 +435,11 @@ public class Maze extends JFrame {
                             color = Color.RED; // goal (red)
                             break;
                         case 4:
-                            color = Color.GREEN; // goal (red)
+                            color = Color.WHITE; // goal (red)
                             break;
                         case 2:
-                            color = Color.YELLOW; // initial state (yellow)
+                            color = Color.darkGray; // initial state (yellow)
+
                             break;
                         default:
                             color = Color.WHITE; // white free space 0 (white)
@@ -426,7 +448,24 @@ public class Maze extends JFrame {
                     g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
                     g.setColor(Color.BLUE); // the border rectangle color
                     g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
+                    if (maze[row][col] == 2) {
 
+                        g.setColor(Color.red);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
+                        g.setColor(Color.white);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
+                        g.setColor(Color.GREEN);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
+                    }
+
+                    if (maze[row][col] == 4) {
+                        g.setColor(Color.BLACK);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                        g.setColor(Color.BLACK);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                        g.setColor(Color.darkGray);
+                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (5), 10, 5, 5);
+                    }
                 }
 
             }

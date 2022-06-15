@@ -180,7 +180,7 @@ public class Maze extends JFrame {
     public void restoreResource(int[][] savedMazed) {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
-                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 2) {
+                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 2 || maze[i][j] == 3 || maze[i][j] == 4) {
                     maze[i][j] = savedMazed[i][j];
 
                 } else if (savedMazed[i][j] == 2) {
@@ -195,11 +195,10 @@ public class Maze extends JFrame {
     public void restoreDestination(int[][] savedMazed) {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
-                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 3) {
+                if (savedMazed[i][j] == 1 || savedMazed[i][j] == 0 || savedMazed[i][j] == 3 || savedMazed[i][j] == 4
+                        || savedMazed[i][j] == 2) {
                     maze[i][j] = savedMazed[i][j];
 
-                } else if (savedMazed[i][j] == 3) {
-                    maze[i][j] = 3;
                 }
 
             }
@@ -283,6 +282,10 @@ public class Maze extends JFrame {
                     arr[i][j] = 1;
                 } else if (maze[i][j] == 0) {
                     arr[i][j] = 0;
+                } else if (maze[i][j] == 4) {
+                    arr[i][j] = 4;
+                } else if (maze[i][j] == 3) {
+                    arr[i][j] = 3;
                 }
             }
         }
@@ -293,7 +296,12 @@ public class Maze extends JFrame {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
 
-                    arr[m][n] = 2;
+                    if (maze[m][n] == 0) {
+                        arr[m][n] = 2;
+                    } else {
+                        arr[i][j] = maze[i][j];
+                    }
+
                 }
             }
         }
@@ -314,6 +322,10 @@ public class Maze extends JFrame {
                     arr[i][j] = 1;
                 } else if (maze[i][j] == 0) {
                     arr[i][j] = 0;
+                } else if (maze[i][j] == 2) {
+                    arr[i][j] = 2;
+                } else if (maze[i][j] == 4) {
+                    arr[i][j] = 4;
                 }
             }
         }
@@ -323,7 +335,13 @@ public class Maze extends JFrame {
                 if (maze[i][j] == 3) {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
-                    arr[m][n] = 3;
+
+                    if (maze[m][n] == 0) {
+                        arr[m][n] = 3;
+                    } else {
+                        arr[i][j] = maze[i][j];
+                    }
+
                 }
             }
         }
@@ -356,7 +374,13 @@ public class Maze extends JFrame {
                 if (maze[i][j] == 4) {
                     int m = row.nextInt(20) + 0;
                     int n = col.nextInt(20) + 0;
-                    arr[m][n] = 4;
+
+                    if (maze[m][n] == 0) {
+                        arr[m][n] = 4;
+                    } else {
+                        arr[i][j] = maze[i][j];
+                    }
+
                 }
             }
         }
@@ -402,12 +426,13 @@ public class Maze extends JFrame {
                     if (maze[row][col] == 2) {
 
                         g.setColor(Color.red);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2.5), (int) (16), (int) (4));
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
                         g.setColor(Color.white);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), (int) (4));
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
                         g.setColor(Color.GREEN);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2.5), 2, 20);
+                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
                     }
+
                     if (maze[row][col] == 4) {
                         g.setColor(Color.BLACK);
                         g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);

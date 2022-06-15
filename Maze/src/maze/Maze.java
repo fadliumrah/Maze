@@ -45,6 +45,7 @@ public class Maze extends JFrame {
     JButton ResetCourierPosition;
     JButton Working;
 
+    // inisialisasi variabel repaint
     boolean repaint;
 
     public Maze() {
@@ -76,6 +77,7 @@ public class Maze extends JFrame {
         add(ResetCourierPosition);
         add(Working);
 
+        // menampilkan frame ke layar
         setVisible(true);
 
         // set posisi dari button
@@ -88,15 +90,15 @@ public class Maze extends JFrame {
 
         // aksi yang akan dijalankan ketika mengklik button Reset Map
         ResetMap.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // membuat array acak dan menyimpan di x
-                maze = GenerateArray();
-                repaint = true;
+                // memanggil fungsi array acak dan menyimpan di array maze
+                int x[][] = GenerateArray();
 
-                // untuk menampilkan array x di layar
-                restore(maze);
+                // untuk menyimpan array ke array utama/maze
+                restore(x);
 
                 // menggambar ulang array di frame
                 repaint();
@@ -108,6 +110,7 @@ public class Maze extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 // menutup aplikasi
                 System.exit(0);
             }
@@ -115,44 +118,58 @@ public class Maze extends JFrame {
 
         // aksi yang akan dilakkan ketika mengklik button Reset Resource
         ResetResource.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
-                int x[][] = GenerateResouce();
-                repaint = true;
-                restoreResource(x);
-                repaint();
 
+                // memanggil fungsi GenerateResource dan menyimpan di array x
+                int x[][] = GenerateResouce();
+
+                // untuk menyimpan array ke array utama/maze
+                restore(x);
+
+                // menggambar ulang array di freme
+                repaint();
             }
         });
 
         // aksi yang akan dilakkan ketika mengklik button Reset Destination
         ResetDestination.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // memanggil fungsi GenerateDestination dan menyimpannya di array x
                 int x[][] = GenerateDestination();
-                repaint = true;
-                restoreDestination(x);
-                repaint();
 
+                // menyimpan ulang array x di array utama/maze
+                restore(x);
+
+                // menggambar ulang array di frame
+                repaint();
             }
         });
 
         // aksi yang akan dilakkan ketika mengklik button Reset Courier Position
         ResetCourierPosition.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                // memanggil fungsi GenerateCourierPosition dan menyimpannya di array x
                 int x[][] = GenerateCourierPosition();
-                repaint = true;
-                restoreCourierPosition(x);
-                repaint();
 
+                // menyimpan ulang array x di array utama/maze
+                restore(x);
+
+                // menggambar ulang array di frame
+                repaint();
             }
         });
 
         // aksi yang akan dilakkan ketika mengklik button Working
         Working.addActionListener(new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
 
@@ -160,7 +177,6 @@ public class Maze extends JFrame {
 
             }
         });
-
     }
 
     // dapatkan ukuran labirin
@@ -168,82 +184,36 @@ public class Maze extends JFrame {
         return maze.length;
     }
 
+    // menyimpan ulang array ke dalam array maze/array utama
     public void restore(int[][] savedMazed) {
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 maze[i][j] = savedMazed[i][j];
             }
         }
-
     }
 
-    public void restoreResource(int[][] savedMazed) {
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 2 || maze[i][j] == 3 || maze[i][j] == 4) {
-                    maze[i][j] = savedMazed[i][j];
-
-                } else if (savedMazed[i][j] == 2) {
-                    maze[i][j] = 2;
-                }
-
-            }
-        }
-
-    }
-
-    public void restoreDestination(int[][] savedMazed) {
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (savedMazed[i][j] == 1 || savedMazed[i][j] == 0 || savedMazed[i][j] == 3 || savedMazed[i][j] == 4
-                        || savedMazed[i][j] == 2) {
-                    maze[i][j] = savedMazed[i][j];
-
-                }
-
-            }
-        }
-
-    }
-
-    public void restoreCourierPosition(int[][] savedMazed) {
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (maze[i][j] == 1 || maze[i][j] == 0 || maze[i][j] == 4 || maze[i][j] == 3 || maze[i][j] == 2) {
-                    maze[i][j] = savedMazed[i][j];
-
-                } else if (savedMazed[i][j] == 4) {
-                    maze[i][j] = 4;
-                }
-
-            }
-        }
-
-    }
-
-    // menghasilkan array acak dengan nilai 0 atau 1
     public int[][] GenerateArray() {
         // tempat menyimpan array yang sudah diacak
         int[][] arr;
 
-        arr = new int[20][20];
+        arr = new int[Size()][Size()];
         Random rnd = new Random();
 
-        for (int i = 0; i < 20; i = i + 1) {
-            for (int j = 0; j < 20; j = j + 1) {
+        for (int i = 0; i < Size(); i = i + 1) {
+            for (int j = 0; j < Size(); j = j + 1) {
                 if (i % 2 == 0 || j % 2 == 1) {
                     int n = rnd.nextInt(2) + 0;
                     arr[i][j] = n;
                 }
-
             }
         }
+
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 if (maze[i][j] == 2) {
                     // sumber daya atau paket
                     arr[i][j] = 2;
-
                 }
             }
         }
@@ -269,37 +239,70 @@ public class Maze extends JFrame {
         return arr;
     }
 
-    // menghasilkan array acak dengan nilai 0 atau 1
     public int[][] GenerateResouce() {
+        // tempat menyimpan array untuk sementara
         int[][] arr;
-        arr = new int[20][20];
+        arr = new int[Size()][Size()];
         Random row = new Random();
         Random col = new Random();
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-
-                if (maze[i][j] == 1) {
-                    arr[i][j] = 1;
-                } else if (maze[i][j] == 0) {
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 0) {
                     arr[i][j] = 0;
-                } else if (maze[i][j] == 4) {
-                    arr[i][j] = 4;
+                } else if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
                 } else if (maze[i][j] == 3) {
                     arr[i][j] = 3;
+                } else if (maze[i][j] == 4) {
+                    arr[i][j] = 4;
                 }
             }
         }
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
 
                 if (maze[i][j] == 2) {
-                    int m = row.nextInt(20) + 0;
-                    int n = col.nextInt(20) + 0;
+                    int m = row.nextInt(Size()) + 0;
+                    int n = col.nextInt(Size()) + 0;
 
                     if (maze[m][n] == 0) {
                         arr[m][n] = 2;
                     } else {
-                        arr[i][j] = maze[i][j];
+                        m = row.nextInt(Size()) + 0;
+                        n = col.nextInt(Size()) + 0;
+                        if (maze[m][n] == 0) {
+                            arr[m][n] = 2;
+                        } else {
+                            m = row.nextInt(Size()) + 0;
+                            n = col.nextInt(Size()) + 0;
+                            if (maze[m][n] == 0) {
+                                arr[m][n] = 2;
+                            } else {
+                                m = row.nextInt(Size()) + 0;
+                                n = col.nextInt(Size()) + 0;
+                                if (maze[m][n] == 0) {
+                                    arr[m][n] = 2;
+                                } else {
+                                    m = row.nextInt(Size()) + 0;
+                                    n = col.nextInt(Size()) + 0;
+                                    if (maze[m][n] == 0) {
+                                        arr[m][n] = 2;
+                                    } else {
+                                        m = row.nextInt(Size()) + 0;
+                                        n = col.nextInt(Size()) + 0;
+                                        if (maze[m][n] == 0) {
+                                            arr[m][n] = 2;
+                                        } else {
+                                            arr[i][j] = maze[i][j];
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
                     }
 
                 }
@@ -309,7 +312,6 @@ public class Maze extends JFrame {
         return arr;
     }
 
-    // menghasilkan array acak dengan nilai 0 atau 1
     public int[][] GenerateDestination() {
         int[][] arr;
         arr = new int[20][20];
@@ -329,17 +331,50 @@ public class Maze extends JFrame {
                 }
             }
         }
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
 
                 if (maze[i][j] == 3) {
-                    int m = row.nextInt(20) + 0;
-                    int n = col.nextInt(20) + 0;
+                    int m = row.nextInt(Size()) + 0;
+                    int n = col.nextInt(Size()) + 0;
 
                     if (maze[m][n] == 0) {
                         arr[m][n] = 3;
                     } else {
-                        arr[i][j] = maze[i][j];
+                        m = row.nextInt(Size()) + 0;
+                        n = col.nextInt(Size()) + 0;
+                        if (maze[m][n] == 0) {
+                            arr[m][n] = 3;
+                        } else {
+                            m = row.nextInt(Size()) + 0;
+                            n = col.nextInt(Size()) + 0;
+                            if (maze[m][n] == 0) {
+                                arr[m][n] = 3;
+                            } else {
+                                m = row.nextInt(Size()) + 0;
+                                n = col.nextInt(Size()) + 0;
+                                if (maze[m][n] == 0) {
+                                    arr[m][n] = 3;
+                                } else {
+                                    m = row.nextInt(Size()) + 0;
+                                    n = col.nextInt(Size()) + 0;
+                                    if (maze[m][n] == 0) {
+                                        arr[m][n] = 3;
+                                    } else {
+                                        m = row.nextInt(Size()) + 0;
+                                        n = col.nextInt(Size()) + 0;
+                                        if (maze[m][n] == 0) {
+                                            arr[m][n] = 3;
+                                        } else {
+                                            arr[i][j] = maze[i][j];
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
                     }
 
                 }
@@ -368,17 +403,51 @@ public class Maze extends JFrame {
                 }
             }
         }
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
 
                 if (maze[i][j] == 4) {
-                    int m = row.nextInt(20) + 0;
-                    int n = col.nextInt(20) + 0;
+                    int m = row.nextInt(Size()) + 0;
+                    int n = col.nextInt(Size()) + 0;
 
                     if (maze[m][n] == 0) {
                         arr[m][n] = 4;
                     } else {
-                        arr[i][j] = maze[i][j];
+                        m = row.nextInt(Size()) + 0;
+                        n = col.nextInt(Size()) + 0;
+                        if (maze[m][n] == 0) {
+                            arr[m][n] = 4;
+                        } else {
+                            m = row.nextInt(Size()) + 0;
+                            n = col.nextInt(Size()) + 0;
+                            if (maze[m][n] == 0) {
+                                arr[m][n] = 4;
+                            } else {
+                                m = row.nextInt(Size()) + 0;
+                                n = col.nextInt(Size()) + 0;
+                                if (maze[m][n] == 0) {
+                                    arr[m][n] = 4;
+                                } else {
+                                    m = row.nextInt(Size()) + 0;
+                                    n = col.nextInt(Size()) + 0;
+                                    if (maze[m][n] == 0) {
+                                        arr[m][n] = 4;
+                                    } else {
+                                        m = row.nextInt(Size()) + 0;
+                                        n = col.nextInt(Size()) + 0;
+                                        if (maze[m][n] == 0) {
+                                            arr[m][n] = 4;
+                                        } else {
+                                            arr[i][j] = maze[i][j];
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
                     }
 
                 }
@@ -394,105 +463,48 @@ public class Maze extends JFrame {
         super.paint(g);
         g.translate(70, 70); // move the maze to begin at 70 from x and 70 from y
 
-        // draw the maze to random
-        if (repaint == true) {
-            for (int row = 0; row < maze.length; row++) {
-                for (int col = 0; col < maze.length; col++) {
-                    Color color;
-                    switch (maze[row][col]) {
-                        case 1:
-                            color = Color.darkGray; // block (black)
-                            break;
-                        case 3:
-                            color = Color.RED; // goal (red)
-                            break;
-                        case 4:
-                            color = Color.white; // goal (red)
-                            break;
-                        case 2:
-                            color = Color.darkGray; // initial state (yellow)
+        for (int row = 0; row < Size(); row++) {
+            for (int col = 0; col < Size(); col++) {
+                Color color;
+                switch (maze[row][col]) {
+                    case 1:
+                        color = Color.darkGray; // block (black)
+                        break;
+                    case 3:
+                        color = Color.RED; // goal (red)
+                        break;
+                    case 4:
+                        color = Color.WHITE; // goal (red)
+                        break;
+                    case 2:
+                        color = Color.darkGray; // initial state (yellow)
 
-                            break;
-
-                        default:
-                            color = Color.WHITE; // white free space 0 (white)
-                    }
-
-                    g.setColor(color);
-                    g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
-                    g.setColor(Color.BLUE); // the border rectangle color
-                    g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
-
-                    if (maze[row][col] == 2) {
-
-                        g.setColor(Color.red);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
-                        g.setColor(Color.white);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
-                        g.setColor(Color.GREEN);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
-                    }
-
-                    if (maze[row][col] == 4) {
-                        g.setColor(Color.BLACK);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
-                        g.setColor(Color.BLACK);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
-                        g.setColor(Color.darkGray);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (5), 10, 5, 5);
-                    }
-
+                        break;
+                    default:
+                        color = Color.WHITE; // white free space 0 (white)
                 }
-            }
-        }
+                g.setColor(color);
+                g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
+                g.setColor(Color.BLUE); // the border rectangle color
+                g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
+                if (maze[row][col] == 2) {
 
-        // draw the maze to initial maze
-        if (repaint == false) { // what to do if the repaint was set to false (draw the solution for the maze)
-
-            for (int row = 0; row < maze.length; row++) {
-                for (int col = 0; col < maze.length; col++) {
-                    Color color;
-                    switch (maze[row][col]) {
-                        case 1:
-                            color = Color.darkGray; // block (black)
-                            break;
-                        case 3:
-                            color = Color.RED; // goal (red)
-                            break;
-                        case 4:
-                            color = Color.WHITE; // goal (red)
-                            break;
-                        case 2:
-                            color = Color.darkGray; // initial state (yellow)
-
-                            break;
-                        default:
-                            color = Color.WHITE; // white free space 0 (white)
-                    }
-                    g.setColor(color);
-                    g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
-                    g.setColor(Color.BLUE); // the border rectangle color
-                    g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
-                    if (maze[row][col] == 2) {
-
-                        g.setColor(Color.red);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
-                        g.setColor(Color.white);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
-                        g.setColor(Color.GREEN);
-                        g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
-                    }
-
-                    if (maze[row][col] == 4) {
-                        g.setColor(Color.BLACK);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
-                        g.setColor(Color.BLACK);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
-                        g.setColor(Color.darkGray);
-                        g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (5), 10, 5, 5);
-                    }
+                    g.setColor(Color.red);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
+                    g.setColor(Color.white);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
+                    g.setColor(Color.GREEN);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
                 }
 
+                if (maze[row][col] == 4) {
+                    g.setColor(Color.BLACK);
+                    g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                    g.setColor(Color.BLACK);
+                    g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
+                    g.setColor(Color.darkGray);
+                    g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (5), 10, 5, 5);
+                }
             }
 
         }

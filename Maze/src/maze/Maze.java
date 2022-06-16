@@ -15,9 +15,9 @@ public class Maze extends JFrame {
 
     // susunan awal untuk labirin
     int[][] maze = new int[][] {
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 0, 2, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1 },
-            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 4, 1, 0, 0, 0, 1 },
+            { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+            { 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1 },
+            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
@@ -33,8 +33,8 @@ public class Maze extends JFrame {
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0 },
             { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0 },
             { 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0 },
-            { 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0 },
-            { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0 }
+            { 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 },
+            { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 3 }
     };
 
     // inisialisasi tombol-tombol
@@ -212,7 +212,6 @@ public class Maze extends JFrame {
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 if (maze[i][j] == 2) {
-                    // sumber daya atau paket
                     arr[i][j] = 2;
                 }
             }
@@ -221,7 +220,6 @@ public class Maze extends JFrame {
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 if (maze[i][j] == 3) {
-
                     arr[i][j] = 3;
                 }
             }
@@ -230,7 +228,6 @@ public class Maze extends JFrame {
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 if (maze[i][j] == 4) {
-
                     arr[i][j] = 4;
                 }
             }
@@ -243,8 +240,10 @@ public class Maze extends JFrame {
         // tempat menyimpan array untuk sementara
         int[][] arr;
         arr = new int[Size()][Size()];
+
         Random row = new Random();
         Random col = new Random();
+
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
                 if (maze[i][j] == 0) {
@@ -271,29 +270,38 @@ public class Maze extends JFrame {
                     } else {
                         m = row.nextInt(Size()) + 0;
                         n = col.nextInt(Size()) + 0;
+
                         if (maze[m][n] == 0) {
                             arr[m][n] = 2;
                         } else {
                             m = row.nextInt(Size()) + 0;
                             n = col.nextInt(Size()) + 0;
+
                             if (maze[m][n] == 0) {
                                 arr[m][n] = 2;
                             } else {
                                 m = row.nextInt(Size()) + 0;
                                 n = col.nextInt(Size()) + 0;
+
                                 if (maze[m][n] == 0) {
                                     arr[m][n] = 2;
                                 } else {
                                     m = row.nextInt(Size()) + 0;
                                     n = col.nextInt(Size()) + 0;
+
                                     if (maze[m][n] == 0) {
                                         arr[m][n] = 2;
                                     } else {
                                         m = row.nextInt(Size()) + 0;
                                         n = col.nextInt(Size()) + 0;
+
                                         if (maze[m][n] == 0) {
                                             arr[m][n] = 2;
                                         } else {
+                                            // top ampe ini aje deh, capek kepanjangan ngecek nya
+                                            // soalnya ketika hasil random untuk array dengan nilai 2, namun
+                                            // menimpa array 1,3 atau 4 maka harus random lagi sampai ketemu array
+                                            // dengan nilai 0 alias jalanan
                                             arr[i][j] = maze[i][j];
                                         }
                                     }
@@ -315,15 +323,17 @@ public class Maze extends JFrame {
     public int[][] GenerateDestination() {
         int[][] arr;
         arr = new int[20][20];
+
         Random row = new Random();
         Random col = new Random();
+
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
 
-                if (maze[i][j] == 1) {
-                    arr[i][j] = 1;
-                } else if (maze[i][j] == 0) {
+                if (maze[i][j] == 0) {
                     arr[i][j] = 0;
+                } else if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
                 } else if (maze[i][j] == 2) {
                     arr[i][j] = 2;
                 } else if (maze[i][j] == 4) {
@@ -331,6 +341,7 @@ public class Maze extends JFrame {
                 }
             }
         }
+
         for (int i = 0; i < Size(); i++) {
             for (int j = 0; j < Size(); j++) {
 
@@ -343,29 +354,38 @@ public class Maze extends JFrame {
                     } else {
                         m = row.nextInt(Size()) + 0;
                         n = col.nextInt(Size()) + 0;
+
                         if (maze[m][n] == 0) {
                             arr[m][n] = 3;
                         } else {
                             m = row.nextInt(Size()) + 0;
                             n = col.nextInt(Size()) + 0;
+
                             if (maze[m][n] == 0) {
                                 arr[m][n] = 3;
                             } else {
                                 m = row.nextInt(Size()) + 0;
                                 n = col.nextInt(Size()) + 0;
+
                                 if (maze[m][n] == 0) {
                                     arr[m][n] = 3;
                                 } else {
                                     m = row.nextInt(Size()) + 0;
                                     n = col.nextInt(Size()) + 0;
+
                                     if (maze[m][n] == 0) {
                                         arr[m][n] = 3;
                                     } else {
                                         m = row.nextInt(Size()) + 0;
                                         n = col.nextInt(Size()) + 0;
+
                                         if (maze[m][n] == 0) {
                                             arr[m][n] = 3;
                                         } else {
+                                            // top ampe ini aje deh, capek kepanjangan ngecek nya
+                                            // soalnya ketika hasil random untuk array dengan nilai 2, namun
+                                            // menimpa array 1,3 atau 4 maka harus random lagi sampai ketemu array
+                                            // dengan nilai 0 alias jalanan
                                             arr[i][j] = maze[i][j];
                                         }
                                     }
@@ -392,10 +412,10 @@ public class Maze extends JFrame {
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
 
-                if (maze[i][j] == 1) {
-                    arr[i][j] = 1;
-                } else if (maze[i][j] == 0) {
+                if (maze[i][j] == 0) {
                     arr[i][j] = 0;
+                } else if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
                 } else if (maze[i][j] == 2) {
                     arr[i][j] = 2;
                 } else if (maze[i][j] == 3) {
@@ -416,29 +436,38 @@ public class Maze extends JFrame {
                     } else {
                         m = row.nextInt(Size()) + 0;
                         n = col.nextInt(Size()) + 0;
+
                         if (maze[m][n] == 0) {
                             arr[m][n] = 4;
                         } else {
                             m = row.nextInt(Size()) + 0;
                             n = col.nextInt(Size()) + 0;
+
                             if (maze[m][n] == 0) {
                                 arr[m][n] = 4;
                             } else {
                                 m = row.nextInt(Size()) + 0;
                                 n = col.nextInt(Size()) + 0;
+
                                 if (maze[m][n] == 0) {
                                     arr[m][n] = 4;
                                 } else {
                                     m = row.nextInt(Size()) + 0;
                                     n = col.nextInt(Size()) + 0;
+
                                     if (maze[m][n] == 0) {
                                         arr[m][n] = 4;
                                     } else {
                                         m = row.nextInt(Size()) + 0;
                                         n = col.nextInt(Size()) + 0;
+
                                         if (maze[m][n] == 0) {
                                             arr[m][n] = 4;
                                         } else {
+                                            // top ampe ini aje deh, capek kepanjangan ngecek nya
+                                            // soalnya ketika hasil random untuk array dengan nilai 2, namun
+                                            // menimpa array 1,3 atau 4 maka harus random lagi sampai ketemu array
+                                            // dengan nilai 0 alias jalanan
                                             arr[i][j] = maze[i][j];
                                         }
                                     }
@@ -483,10 +512,12 @@ public class Maze extends JFrame {
                     default:
                         color = Color.WHITE; // white free space 0 (white)
                 }
+
                 g.setColor(color);
                 g.fillRect(20 * col, 20 * row, 20, 20); // fill rectangular with color
                 g.setColor(Color.BLUE); // the border rectangle color
                 g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
+
                 if (maze[row][col] == 2) {
 
                     g.setColor(Color.red);

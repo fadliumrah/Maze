@@ -15,13 +15,13 @@ public class Maze extends JFrame {
 
     // susunan awal untuk labirin
     int[][] maze = new int[][] {
-            { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4 },
+            { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
-            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
+            { 0, 1, 0, 0, 0, 1, 0, 0, 1, 4, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 },
@@ -173,7 +173,14 @@ public class Maze extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                // code here
+                // memanggil fungsi GenerateCourierPosition dan menyimpannya di array x
+                int x[][] = Working();
+
+                // menyimpan ulang array x di array utama/maze
+                restore(x);
+
+                // menggambar ulang array di frame
+                repaint();
 
             }
         });
@@ -322,13 +329,13 @@ public class Maze extends JFrame {
 
     public int[][] GenerateDestination() {
         int[][] arr;
-        arr = new int[20][20];
+        arr = new int[Size()][Size()];
 
         Random row = new Random();
         Random col = new Random();
 
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
 
                 if (maze[i][j] == 0) {
                     arr[i][j] = 0;
@@ -406,11 +413,11 @@ public class Maze extends JFrame {
 
     public int[][] GenerateCourierPosition() {
         int[][] arr;
-        arr = new int[20][20];
+        arr = new int[Size()][Size()];
         Random row = new Random();
         Random col = new Random();
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
 
                 if (maze[i][j] == 0) {
                     arr[i][j] = 0;
@@ -484,6 +491,127 @@ public class Maze extends JFrame {
         }
 
         return arr;
+    }
+
+    public int[][] Working() {
+        int[][] arr;
+        arr = new int[Size()][Size()];
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+
+                if (maze[i][j] == 0) {
+                    arr[i][j] = 0;
+                } else if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
+                } else if (maze[i][j] == 2) {
+                    arr[i][j] = 2;
+                } else if (maze[i][j] == 3) {
+                    arr[i][j] = 3;
+                }
+            }
+        }
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 4) {
+                    // courier
+                    int x = GetIndexBarisCourier();
+                    int y = GetIndexColomCourier();
+                    // resource
+                    int p = GetIndexBarisResource();
+                    int q = GetIndexColomResource();
+
+                    // ii == courier && iv == resource
+                    if (x < p && y < q) {
+                        if ((maze[i - 1][j] == 0 || maze[i + 1][j] == 1 || maze[i][j + 1] == 1 || maze[i][j - 1] == 1)
+                                && maze[i - 1][j] != 1) {
+                            arr[i - 1][j] = 4;
+                        }
+
+                    }
+                    // iii == courier && i == resource
+                    else if (x > p && y < q) {
+
+                    }
+                    // ii == courier && i == resource
+                    else if (x == p && y < q) {
+
+                    }
+                    // i == courier && iii == resource
+                    else if (x < p && y > q) {
+
+                    }
+                    // iv == courier && ii == resource
+                    else if (x > p && y > q) {
+
+                    }
+
+                    // i == courier && ii == resource
+                    else if (x == p && y > q) {
+
+                    }
+                    // ii = courier && iii == resource
+                    else if (x < p && y == q) {
+
+                    }
+                    // iii = courier && ii == resource
+                    else if (x > p && y == q) {
+
+                    }
+                }
+            }
+        }
+
+        return arr;
+
+    }
+
+    public int GetIndexBarisCourier() {
+        int a = 0;
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 4) {
+                    a = i;
+                }
+            }
+        }
+        return a;
+    }
+
+    public int GetIndexColomCourier() {
+        int b = 0;
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 4) {
+                    b = j;
+                }
+            }
+        }
+        return b;
+    }
+
+    public int GetIndexBarisResource() {
+        int a = 0;
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 2) {
+                    a = i;
+                }
+            }
+        }
+        return a;
+    }
+
+    public int GetIndexColomResource() {
+        int b = 0;
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 2) {
+                    b = j;
+                }
+            }
+        }
+        return b;
     }
 
     // draw the maze on the JFrame

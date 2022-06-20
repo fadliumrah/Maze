@@ -23,14 +23,14 @@ public class Maze extends JFrame {
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1 },
             { 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1 },
-            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0 },
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 },
             { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0 },
             { 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 2 },
             { 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0 },
             { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 },
             { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-            { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 4 },
+            { 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0 },
             { 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0 },
             { 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0 },
             { 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 },
@@ -174,13 +174,13 @@ public class Maze extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
                 // memanggil fungsi GenerateCourierPosition dan menyimpannya di array x
-                int x[][] = Working();
 
-                // menyimpan ulang array x di array utama/maze
-                restore(x);
-
-                // menggambar ulang array di frame
-                repaint();
+                try {
+                    Working();
+                } catch (InterruptedException e1) {
+                    System.exit(0);
+                    e1.printStackTrace();
+                }
 
             }
         });
@@ -209,7 +209,7 @@ public class Maze extends JFrame {
 
         for (int i = 0; i < Size(); i = i + 1) {
             for (int j = 0; j < Size(); j = j + 1) {
-                if (i % 2 == 0 || j % 2 == 1) {
+                if (i % 2 == 1 || j % 2 == 1) {
                     int n = rnd.nextInt(2) + 0;
                     arr[i][j] = n;
                 }
@@ -493,317 +493,6 @@ public class Maze extends JFrame {
         return arr;
     }
 
-    public int[][] Working() {
-        int[][] arr;
-        arr = new int[Size()][Size()];
-        // courier
-        int x = GetIndexBarisCourier();
-        int y = GetIndexColomCourier();
-        // resource
-        int p = GetIndexBarisResource();
-        int q = GetIndexColomResource();
-
-        for (int i = 0; i < Size(); i++) {
-            for (int j = 0; j < Size(); j++) {
-
-                if (maze[i][j] == 0) {
-                    arr[i][j] = 0;
-                } else if (maze[i][j] == 1) {
-                    arr[i][j] = 1;
-                } else if (maze[i][j] == 2) {
-                    arr[i][j] = 2;
-                } else if (maze[i][j] == 3) {
-                    arr[i][j] = 3;
-                }
-            }
-        }
-        for (int i = 0; i < Size(); i++) {
-            for (int j = 0; j < Size(); j++) {
-                if (maze[i][j] == 4) {
-
-                    // ii == courier && iv == resource
-                    if (x < p && y < q) {
-                        // jika kondisi satu kotak di kiri, kanan, atas dan bawah kosong
-                        if (maze[i - 1][j] == 0 && maze[i + 1][j] == 0 && maze[i][j - 1] == 0 &&
-                                maze[i][j + 1] == 0) {
-                            // kondisi yang mengakibatkan courier jalan ke kanan
-                            if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                    y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                                arr[i][j + 1] = 4;
-                            }
-                            // kondisi yang mengakibatkan courier jalan ke bawah
-                            else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                    && maze[i + 1][j] == 0) {
-                                arr[i + 1][j] = 4;
-                            } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                                arr[i + 1][j] = 4;
-                            } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                    && y == (Size() - 1)) {
-                                arr[i + 1][j] = 4;
-                            }
-
-                        }
-                        // jika kondisi satu atau dua kotak di kanan ada rumah
-                        else if (maze[i][j + 1] == 1 || maze[i][j + 2] == 1) {
-                            // kondisi yang mengakibatkan courier jalan ke kanan
-                            if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                    y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                                arr[i][j + 1] = 4;
-                            }
-                            // kondisi yang mengakibatkan courier jalan ke bawah
-                            else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                    && maze[i + 1][j] == 0) {
-                                arr[i + 1][j] = 4;
-                            } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                                arr[i + 1][j] = 4;
-                            } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                    && y == (Size() - 1)) {
-                                arr[i + 1][j] = 4;
-                            }
-
-                        } // jika kondisi satu atau dua kotak di atas ada rumah dan dibawah rumah
-                        else if ((maze[i - 1][j] == 1 || maze[i - 2][j] == 1) && maze[i + 1][j] == 1) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // jika kondisi satu atau dua kotak di atas ada rumah
-                        else if (maze[i - 1][j] == 1 || maze[i - 2][j] == 1) {
-                            arr[i + 1][j] = 4;
-                        }
-                        // jika kondisi satu atau dua kotak di kiri ada rumah
-                        else if (maze[i][j - 1] == 1 || maze[i][j - 2] == 1) {
-                            arr[i + 1][j] = 4;
-                        }
-                        // jika kondisi satu atau dua kotak di bawah ada rumah
-                        else if (maze[i + 1][j] == 1 || maze[i + 2][j] == 1) {
-                            // kondisi yang mengakibatkan courier jalan ke kanan
-                            if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                    y < q)) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                                arr[i][j + 1] = 4;
-                            } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                                arr[i][j + 1] = 4;
-                            }
-
-                        }
-
-                    }
-                    // iii == courier && i == resource
-                    else if (x > p && y < q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-                    // ii == courier && i == resource
-                    else if (x == p && y < q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-                    // i == courier && iii == resource
-                    else if (x < p && y > q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-                    // iv == courier && ii == resource
-                    else if (x > p && y > q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-
-                    // i == courier && ii == resource
-                    else if (x == p && y > q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-                    // ii = courier && iii == resource
-                    else if (x < p && y == q) {
-                        // kondisi yang mengakibatkan courier jalan ke kanan
-                        if ((maze[i][j + 2] == 0) && (maze[i + 1][j] == 1 || maze[i + 2][j] == 1)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p && y < q) && (x == (Size() - 1) &&
-                                y < q)) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j + 1] != 0) {
-                            arr[i][j + 1] = 4;
-                        } else if (maze[i][j + 1] == 0 && (x == p - 1 && y < q) && maze[i + 1][j] != 0) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // kondisi yang mengakibatkan courier jalan ke bawah
-                        else if (((maze[i][j + 2] == 1) || (maze[i + 1][j] == 0 || maze[i + 2][j] == 0))
-                                && maze[i + 1][j] == 0) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q)) {
-                            arr[i + 1][j] = 4;
-                        } else if (maze[i + 1][j] == 0 && (x < p && y == q) && x == (Size() - 1)
-                                && y == (Size() - 1)) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-                    // iii = courier && ii == resource
-                    else if (x > p && y == q) {
-                        // jalan ke atas
-                        if (maze[i - 1][j] == 0) {
-                            arr[i - 1][j] = 4;
-                        }
-                        // jalan ke kanan
-                        else if (maze[i][j + 1] == 0 && (maze[i - 1][j] == 1 || (maze[i - 1][j] == 1 && y == 0))) {
-                            arr[i][j + 1] = 4;
-                        }
-                        // jalan ke kiri
-                        else if (maze[i][j - 1] == 0
-                                && ((maze[i - 1][j] == 1 && (y == Size() - 1))
-                                        || (maze[i - 1][j] == 1 && maze[i][j + 1] == 1))) {
-                            arr[i][j - 1] = 4;
-                        }
-                        // jalan ke bawah
-                        else if (maze[i + 1][j] == 0
-                                && ((maze[i - 1][j] == 1 && maze[i][j + 1] == 1 && maze[i][j - 1] == 1)
-                                        || (maze[i - 1][j] == 1 && maze[i][j - 1] == 1 && maze[i][j + 1] == 1))) {
-                            arr[i + 1][j] = 4;
-                        }
-
-                    }
-
-                }
-            }
-        }
-
-        return arr;
-
-    }
-
     public int GetIndexBarisCourier() {
         int a = 0;
         for (int i = 0; i < Size(); i++) {
@@ -850,6 +539,325 @@ public class Maze extends JFrame {
             }
         }
         return b;
+    }
+
+    public void Working() throws InterruptedException {
+        int[][] arr;
+        arr = new int[Size()][Size()];
+        // courier
+        int x = GetIndexBarisCourier();
+        int y = GetIndexColomCourier();
+        // resource
+        int p = GetIndexBarisResource();
+        int q = GetIndexColomResource();
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+
+                if (maze[i][j] == 0) {
+                    arr[i][j] = 0;
+                } else if (maze[i][j] == 1) {
+                    arr[i][j] = 1;
+                } else if (maze[i][j] == 2) {
+                    arr[i][j] = 2;
+                } else if (maze[i][j] == 3) {
+                    arr[i][j] = 3;
+                }
+            }
+        }
+
+        for (int i = 0; i < Size(); i++) {
+            for (int j = 0; j < Size(); j++) {
+                if (maze[i][j] == 4) {
+
+                    // ii == courier && iv == resource
+                    if (x < p && y < q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            if (maze[i + 1][j] == 0 && maze[i + 2][j] == 1) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && (maze[i + 1][j] == 1
+                                    || maze[i][j - 1] == 1 || maze[i + 1][j + 1] == 1)) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if ((maze[i][j - 1] == 0 && maze[i + 1][j] == 1 && maze[i][j + 1] == 1)) {
+                                arr[i][j - 1] = 4;
+
+                            }
+
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j + 1] == 1 && (maze[i][j - 1] == 1)
+                                    && ((maze[i + 1][j] == 1)
+                                            || maze[i + 2][j] == 1)) {
+                                arr[i - 1][j] = 4;
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+
+                    }
+                    // iii == courier && i == resource
+                    else if (x > p && y < q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            if (maze[i][j + 1] == 0) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j + 1] == 1) {
+                                arr[i - 1][j] = 4;
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if ((maze[i][j - 1] == 0 && maze[i - 1][j] == 1 && maze[i][j + 1] == 1)) {
+                                arr[i][j - 1] = 4;
+
+                            }
+
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0 && maze[i][j - 1] == 1 && maze[i - 1][j] == 1
+                                    && maze[i][j + 1] == 1) {
+
+                                arr[i + 1][j] = 4;
+
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+                    // ii == courier && i == resource
+                    else if (x == p && y < q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            if (maze[i][j + 1] == 0) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j + 1] == 1 && (maze[i][j - 1] == 1)
+                                    && ((maze[i + 1][j] == 1)
+                                            || maze[i + 2][j] == 1)) {
+                                arr[i - 1][j] = 4;
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if (maze[i][j - 1] == 0 && maze[i + 1][j] == 1 && maze[i][j + 1] == 1
+                                    && maze[i - 1][j] == 1) {
+                                arr[i][j - 1] = 4;
+
+                            } // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0 && maze[i - 1][j] == 1 && maze[i][j + 1] == 1) {
+                                arr[i + 1][j] = 4;
+
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+                    // i == courier && iii == resource
+                    else if (x < p && y > q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            if (maze[i][j - 1] == 0) {
+                                arr[i][j - 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0
+                                    && (maze[i][j - 2] == 1 || maze[i][j - 1] == 1 || maze[i - 1][j] == 1)) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && maze[i + 1][j] == 1
+                                    && maze[i][j - 1] == 1 && maze[i][j - 1] == 1 && maze[i - 1][j] == 1) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j - 1] == 1 && (maze[i + 1][j] == 1)
+                                    && ((maze[i + 1][j] == 1)
+                                            || maze[i + 2][j] == 1)) {
+                                arr[i - 1][j] = 4;
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+                    // iv == courier && ii == resource
+                    else if (x > p && y > q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            if (maze[i - 1][j] == 0) {
+                                arr[i - 1][j] = 4;
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if (maze[i][j - 1] == 0 && maze[i - 1][j] == 1) {
+                                arr[i][j - 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0 && (maze[i - 1][j] == 1 || maze[i - 1][j] == 1)
+                                    && maze[i][j - 1] == 1
+                                    && maze[i][j + 1] == 1) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && maze[i - 1][j] == 1
+                                    && maze[i][j - 1] == 1) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+
+                            else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+
+                    // i == courier && ii == resource
+                    else if (x == p && y > q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            if (maze[i][j - 1] == 0) {
+                                arr[i][j - 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0 && maze[i][j - 1] == 1 && maze[i - 1][j] == 1) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j - 1] == 1 && maze[i + 1][j] == 1) {
+                                arr[i - 1][j] = 4;
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && (maze[i + 1][j] == 1
+                                    && maze[i][j - 1] == 1 && maze[i - 1][j] == 1)) {
+
+                                arr[i][j + 1] = 4;
+
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+                    // ii = courier && iii == resource
+                    else if (x < p && y == q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            if (maze[i + 1][j] == 0) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && maze[i + 1][j] == 1
+                                    && maze[i][j - 1] == 1) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if ((maze[i][j - 1] == 0 && maze[i + 1][j] == 1 && maze[i][j + 1] == 1)) {
+                                arr[i][j - 1] = 4;
+
+                            }
+
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            else if (maze[i - 1][j] == 0 && maze[i][j + 1] == 1 && maze[i][j - 1] == 1
+                                    && maze[i + 1][j] == 1
+                                    || maze[i + 2][j] == 1) {
+                                arr[i - 1][j] = 4;
+                            } else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+                    // iii = courier && ii == resource
+                    else if (x > p && y == q) {
+                        // jika kondisi satu atau lebih kotak di sekelilingnya 0
+                        if (maze[i - 1][j] == 0 || maze[i + 1][j] == 0 || maze[i][j - 1] == 0 ||
+                                maze[i][j + 1] == 0) {
+                            // kondisi yang mengakibatkan corier jalan ke atas
+                            if (maze[i - 1][j] == 0) {
+                                arr[i - 1][j] = 4;
+                            }
+
+                            // kondisi yang mengakibatkan courier jalan ke kanan
+                            else if (maze[i][j + 1] == 0 && (maze[i - 1][j] == 1
+                                    || maze[i][j - 1] == 1)) {
+
+                                arr[i][j + 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke kiri
+                            else if ((maze[i][j - 1] == 0 && (maze[i - 1][j] == 1 || maze[i][j + 1] == 1))) {
+                                arr[i][j - 1] = 4;
+
+                            }
+                            // kondisi yang mengakibatkan courier jalan ke bawah
+                            else if (maze[i + 1][j] == 0 && maze[i - 1][j] == 1 && maze[i][j - 1] == 1
+                                    && maze[i][j + 1] == 1) {
+
+                                arr[i + 1][j] = 4;
+
+                            }
+
+                            else {
+                                arr[i][j] = 4;
+                            }
+
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+        restore(arr);
+        repaint();
     }
 
     // draw the maze on the JFrame
@@ -914,8 +922,11 @@ public class Maze extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+
                 Maze maze = new Maze(); // we create new class which will invoke the constructor
+
             }
+
         });
 
     }

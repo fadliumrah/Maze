@@ -177,7 +177,7 @@ public class Maze extends JFrame {
 
                 try {
                     Working();
-                } catch (InterruptedException e1) {
+                } catch (Exception e1) {
                     System.exit(0);
                     e1.printStackTrace();
                 }
@@ -565,7 +565,7 @@ public class Maze extends JFrame {
         return b;
     }
 
-    public void Working() throws InterruptedException {
+    public void Working() {
         int[][] arr;
         arr = new int[Size()][Size()];
         // courier

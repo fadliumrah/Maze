@@ -1143,6 +1143,16 @@ public class Maze extends JFrame {
                 g.setColor(Color.BLUE); // the border rectangle color
                 g.drawRect(20 * col, 20 * row, 20, 20); // draw rectangular with color
 
+                if (maze[row][col] == 2) {
+
+                    g.setColor(Color.red);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), (int) (13), (int) (4));
+                    g.setColor(Color.white);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6), (int) (13), (int) (4));
+                    g.setColor(Color.GREEN);
+                    g.fillRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 2), 2, 19);
+                }
+
                 if (maze[row][col] == 4) {
                     g.setColor(Color.BLACK);
                     g.drawRoundRect((int) ((20 * col) + (2.5)), (int) ((20 * row) + 6.5), (int) (16), 10, 5, 5);
